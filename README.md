@@ -1,4 +1,4 @@
-# node-spider
+# yf_spider
 node爬虫，用js编写，用自己写的crawler和puppeteer封装，支持常规和puppeteer两种方式,因为node-crawler包使用request模块,由于有连接复用,缓存,
 存在大规模并发请求下连接和内存暴增长时间释放的问题,所以自己写了个crawler代替
 
