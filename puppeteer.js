@@ -154,7 +154,7 @@ puppeteer.prototype._run=async function(opt){
         }
         if(opt.callback && typeof opt.callback=='function'){
             let content=await page.content()
-            let $=cheerio.load(content)
+            let $=cheerio.load(content,{decodeEntities: false})
             page.$=$
             page.options=opt
             await opt.callback(null,page)
