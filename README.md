@@ -12,6 +12,7 @@ var s=new spider(option)
     ***************************/
     opiton.crawler:object 常规爬虫选项,不定义则不初始化常规爬虫,该项为全局设置,如果queue里有相关设置,则被覆盖
     option.crawler.maxConnections:number 最大并发多少,不设置或者0为不限
+    option.crawler.maxSize:number queue池最大数量,不设置或者0为不限,queue池子大于等于该数,spider.crawler.queue方法await将会阻塞
     option.crawler.retries:number 默认为3,失败了重试几次
     option.crawler.jquery:bool 默认true,内容是否用jquery解析,解析后存在res.$里面
     option.crawler.charset:string 默认utf-8,还支持gb2312,gbk,该选项和jquery选项有关,如果jquery选项为false,该选项无效

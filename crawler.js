@@ -7,8 +7,12 @@ const util=require('util')
 function crawler(opt){
     this.option=opt
     this.limit=0
+    this.maxSize=0
     if('maxConnections' in this.option){
         this.limit=this.option.maxConnections
+    }
+    if('maxSize' in this.option){
+        this.maxSize=this.option.maxSize
     }
     if(!('retries' in this.option)){
         this.option.retries=3
@@ -22,7 +26,7 @@ function crawler(opt){
     if(!('redirect' in this.option)){
         this.option.redirect=true
     }
-    this.jobs=new Jobs({limit:this.limit,callback:(option,done)=>{
+    this.jobs=new Jobs({limit:this.limit,maxSize:this.maxSize,callback:(option,done)=>{
             let reqOpt=option
             if(!('retries' in reqOpt)){
                 reqOpt.retries=this.option.retries
@@ -65,7 +69,7 @@ function crawler(opt){
 }
 util.inherits(crawler,EventEmitter)
 crawler.prototype.queue=function(option){
-    this.jobs.queue(option)
+    return this.jobs.queue(option)
 }
 
 module.exports=crawler
