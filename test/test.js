@@ -49,7 +49,7 @@ spider.crawler.queue({url:'https://www.qq.com',headers:headers,timeout:5000,jque
     console.log($('title').text())
     }})
 
-spider.puppeteer.on('drain',function(){
+/*spider.puppeteer.on('drain',function(){
     console.log('finish')
 })
 
@@ -77,4 +77,4 @@ spider.puppeteer.queue({
         let $=page.$
         console.log($('title').text())
     }
-})
+})*/

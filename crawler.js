@@ -17,6 +17,9 @@ function crawler(opt){
     if(!('retries' in this.option)){
         this.option.retries=3
     }
+    if(!('timeout' in this.option)){
+        this.option.timeout=30000
+    }
     if(!('charset' in this.option)){
         this.option.charset='utf-8'
     }
@@ -34,17 +37,22 @@ function crawler(opt){
             if(!('jquery' in reqOpt)){
                 reqOpt.jquery=this.option.jquery
             }
+            if(!('timeout' in reqOpt)){
+                reqOpt.timeout=this.option.timeout
+            }
+            if(!('redirect' in reqOpt)){
+                reqOpt.redirect=this.option.redirect
+            }
             if(!('charset' in reqOpt)){
                 reqOpt.charset=this.option.charset
             }
             if(!('callback' in reqOpt)){
                 reqOpt.callback=this.option.callback
             }
-            request(reqOpt,(err,res)=> {
+            request(reqOpt,async (err,res)=> {
                 if(err&&reqOpt.retries>0){
                     reqOpt.retries--
-                    delete reqOpt.deadline
-                    this.jobs.queue(reqOpt)
+                    await this.jobs.queue(reqOpt)
                     return
                 }
                 if(!err&&reqOpt.jquery){
