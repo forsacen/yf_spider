@@ -14,7 +14,7 @@ var s=new spider(option)
     option.crawler.maxConnections:number 最大并发多少,不设置或者0为不限
     option.crawler.maxSize:number queue池最大数量,不设置或者0为不限,queue池子大于等于该数,spider.crawler.queue方法await将会阻塞
     option.crawler.retries:number 默认为3,失败了重试几次
-    option.crawler.timeout:超时选项,毫秒,默认0秒为不限 
+    option.crawler.timeout:超时选项,毫秒,默认30秒,30000毫秒
     option.crawler.jquery:bool 默认true,内容是否用jquery解析,解析后存在res.$里面
     option.crawler.charset:string 默认utf-8,还支持gb2312,gbk,该选项和jquery选项有关,如果jquery选项为false,该选项无效
     option.crawler.redirect:bool 默认true,是否重定向,比如301,302跳转,
