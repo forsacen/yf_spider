@@ -22,6 +22,11 @@ jobs:method
     jobs.jobSize() return number
         正在执行的工作的数量,read-only
         
+    jobs.watchFree() return promise,监控jobs是否处于空闲状态(工作队列长度为0,正在执行
+    的工作数量为0),空闲时await该方法将返回(await jobs.watchFree())
+    
+    jobs.isFree() return bool
+        jobs是否处于空闲状态,(工作队列长度为0,正在执行的工作数量为0)
         
 jobs:event
 

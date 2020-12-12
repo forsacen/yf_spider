@@ -80,4 +80,12 @@ crawler.prototype.queue=function(option){
     return this.jobs.queue(option)
 }
 
+crawler.prototype.watchFree=function(){
+    return this.jobs.watchFree()
+}
+
+crawler.prototype.isFree=function(){
+    return this.jobs.isFree()
+}
+
 module.exports=crawler

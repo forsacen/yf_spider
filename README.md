@@ -36,19 +36,24 @@ var s=new spider(option)
 spider.crawler:method
 
     crawler.queue(option):添加任务
-    option:object
-    option.url:sting 采集的url
-    option.proxy:string 代理,格式http://123.231.110.119:8888, socks5://127.0.0.1:1080
-    option.methd:string 默认GET,支持GET和POST,POST不同类型数据需要在headers选项添加对应字段
-    option.data:string|Buffer|Uint8Array POST的数据,如果方法为GET,该选项无效
-    option.timeout:超时选项,毫秒,默认0秒为不限 
-    option.headers:object对象,浏览器httpheader,默认没有
-    option.retries:number 默认为3,失败了重试几次
-    option.jquery:bool 默认true,内容是否用jquery解析,解析后存在res.$里面
-    option.charset:string 默认utf-8,还支持gb2312,gbk,该选项和jquery选项有关,如果jquery选项为false,该选项无效
-    option.redirect:bool 默认false,是否重定向,比如301,302跳转
-    option.callback:function 回调函数
-
+        option:object
+        option.url:sting 采集的url
+        option.proxy:string 代理,格式http://123.231.110.119:8888, socks5://127.0.0.1:1080
+        option.methd:string 默认GET,支持GET和POST,POST不同类型数据需要在headers选项添加对应字段
+        option.data:string|Buffer|Uint8Array POST的数据,如果方法为GET,该选项无效
+        option.timeout:超时选项,毫秒,默认0秒为不限 
+        option.headers:object对象,浏览器httpheader,默认没有
+        option.retries:number 默认为3,失败了重试几次
+        option.jquery:bool 默认true,内容是否用jquery解析,解析后存在res.$里面
+        option.charset:string 默认utf-8,还支持gb2312,gbk,该选项和jquery选项有关,如果jquery选项为false,该选项无效
+        option.redirect:bool 默认false,是否重定向,比如301,302跳转
+        option.callback:function 回调函数
+        
+    crawler.isFree():return bool
+        爬虫是否处于空闲状态
+                  
+    crawler.watchFree() return promise,监控爬虫是否处于空闲状态,
+        空闲时await该方法将返回(await crawler.watchFree())
 
 spider.puppeteer:method     
  
