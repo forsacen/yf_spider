@@ -57,9 +57,9 @@ function crawler(opt){
                 }
                 if(!err&&reqOpt.jquery){
                     if(reqOpt.charset==='utf-8'){
-                        res.$=cheerio.load(res.body.toString(),{decodeEntities: false,_useHtmlParser2: true})
+                        res.$=cheerio.load(res.body.toString(),{decodeEntities: false})
                     }else{
-                        res.$=cheerio.load(iconv.decode(res.body,reqOpt.charset),{decodeEntities: false,_useHtmlParser2: true})
+                        res.$=cheerio.load(iconv.decode(res.body,reqOpt.charset),{decodeEntities: false})
                     }
                 }
                 if(reqOpt.callback && typeof reqOpt.callback==='function'){
