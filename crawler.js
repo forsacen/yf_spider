@@ -63,7 +63,7 @@ function crawler(opt){
                     }
                 }
                 if(reqOpt.callback && typeof reqOpt.callback==='function'){
-                    reqOpt.callback(err,res)
+                    await reqOpt.callback(err,res)
                 }
                 done()
             })
@@ -73,6 +73,10 @@ function crawler(opt){
     })
     this.jobs.on('schedule',(option)=>{
         this.emit('schedule',option)
+    })
+    this.jobs.onAsync('scheduleSync',async (done,option)=>{
+        await this.emitAsync('scheduleSync',option)
+        done()
     })
 }
 util.inherits(crawler,EventEmitter)

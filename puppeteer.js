@@ -120,7 +120,7 @@ puppeteer.prototype._run=async function(opt){
             let cookies= await c.getPupCookies()
             await page.setCookie.apply(page, cookies)
         }
-        if(typeof this._events.request == 'function'){
+        if(this._events.request){
             await page.setRequestInterception(true)
             page.on('request', interceptedRequest => {
                 this.emit('_request',interceptedRequest,opt)
