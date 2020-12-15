@@ -28,6 +28,12 @@ jobs:method
     jobs.isFree() return bool
         jobs是否处于空闲状态,(工作队列长度为0,正在执行的工作数量为0)
         
+    jobs.watchHaseFree() return promise,监控jobs是否有空闲(工作队列长度为0.正在执行
+    的数量小于limit),有空闲时await该方法将返回(await jobs.watchHasFree())
+        
+    jobs.hasFree() return bool
+        jobs是否有空闲,(工作队列长度为0.正在执行的数量小于limit)
+        
 jobs:event
 
     Event: 'schedule',任务开始之前触发,参数option,此时可以修改option做参数调整(option为

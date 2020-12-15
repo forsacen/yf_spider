@@ -84,6 +84,10 @@ crawler.prototype.queue=function(option){
     return this.jobs.queue(option)
 }
 
+crawler.prototype.safeQueue=function(option){
+    return this.jobs.safeQueue(option)
+}
+
 crawler.prototype.watchFree=function(){
     return this.jobs.watchFree()
 }
@@ -91,5 +95,11 @@ crawler.prototype.watchFree=function(){
 crawler.prototype.isFree=function(){
     return this.jobs.isFree()
 }
+
+crawler.prototype.watchFree=function(){
+    return this.jobs.watchFree()
+}
+
+
 
 module.exports=crawler
