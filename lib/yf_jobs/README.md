@@ -15,6 +15,10 @@ jobs:method
 
     jobs.queue(option) reuturn promise,如果工作队列中数据大于等于maxSize,该方法会await阻塞
         option:object 添加的数据
+        
+    jobs.safeQueue(option) reuturn promise,类似queue,不同点是如果jobs有空闲(工作队列长度为0.
+    正在执行的数量小于limit),该方法会await阻塞
+        option:object 添加的数据
 
     jobs.queueSize() reuturn number
         工作队列长度,就是还未从队列中取出的工作的数量,read-only
