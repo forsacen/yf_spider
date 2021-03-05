@@ -53,6 +53,7 @@ function crawler(opt){
                 if(err&&reqOpt.retries>0){
                     reqOpt.retries--
                     await this.jobs.queue(reqOpt)
+                    done()
                     return
                 }
                 if(!err&&reqOpt.jquery){
