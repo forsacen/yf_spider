@@ -8,16 +8,12 @@ jobs:constructor
     jobs=new Jobs(option)
         option:object 
         opiton.limit:number 最多同时做多少个工作,0为不限,默认不限
-        opiton.maxSize:number 工作队列最多放入几个数据,超过queue方法会被阻塞,0为不限,默认不限
         option.callback:function(option,done) 工作对应的函数,option就是queue放进去的数据,done是传过来的内置函数,工作完成后必须调用done函数
                         
 jobs:method
 
-    jobs.queue(option) reuturn promise,如果工作队列中数据大于等于maxSize,该方法会await阻塞
-        option:object 添加的数据
-        
-    jobs.safeQueue(option) reuturn promise,类似queue,不同点是如果jobs有空闲(工作队列长度为0.
-    正在执行的数量小于limit),该方法会await阻塞
+    jobs.queue(option) reuturn promise,如果工作线程数量为limit,该方法会await阻塞,
+        直到至少有一个工作线程空闲为止
         option:object 添加的数据
 
     jobs.queueSize() reuturn number
@@ -25,18 +21,12 @@ jobs:method
         
     jobs.jobSize() return number
         正在执行的工作的数量,read-only
-        
-    jobs.watchFree() return promise,监控jobs是否处于空闲状态(工作队列长度为0,正在执行
-    的工作数量为0),空闲时await该方法将返回(await jobs.watchFree())
     
     jobs.isFree() return bool
-        jobs是否处于空闲状态,(工作队列长度为0,正在执行的工作数量为0)
-        
-    jobs.watchHaseFree() return promise,监控jobs是否有空闲(工作队列长度为0.正在执行
-    的数量小于limit),有空闲时await该方法将返回(await jobs.watchHasFree())
-        
-    jobs.hasFree() return bool
-        jobs是否有空闲,(工作队列长度为0.正在执行的数量小于limit)
+            jobs是否处于空闲状态,(工作队列长度为0,正在执行的工作数量为0)
+    
+    jobs.watchFree() return promise,监控jobs是否处于空闲状态(工作队列长度为0,正在执行
+        的工作数量为0),空闲时await该方法将返回(await jobs.watchFree())
         
 jobs:event
 

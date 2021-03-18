@@ -52,7 +52,7 @@ function crawler(opt){
             request(reqOpt,async (err,res)=> {
                 if(err&&reqOpt.retries>0){
                     reqOpt.retries--
-                    await this.jobs.queue(reqOpt)
+                    this.jobs.pool.unshift(reqOpt)
                     done()
                     return
                 }
@@ -81,13 +81,31 @@ function crawler(opt){
     })
 }
 util.inherits(crawler,EventEmitter)
+
+crawler.prototype.emitAsync=function(event,...args){
+    return new Promise((resolve)=>{
+        if(this._events&&this._events[event]){
+            if(typeof this._events[event]==='function'){
+                this.emit(event,resolve,...args)
+            }else{
+                let count=this._events[event].length
+                this.emit(event,()=>{
+                    count--
+                    if(count===0){
+                        resolve()
+                    }
+                },...args)
+            }
+        }else{
+            resolve()
+        }
+    })
+}
+
 crawler.prototype.queue=function(option){
     return this.jobs.queue(option)
 }
 
-crawler.prototype.safeQueue=function(option){
-    return this.jobs.safeQueue(option)
-}
 
 crawler.prototype.watchFree=function(){
     return this.jobs.watchFree()
@@ -96,11 +114,5 @@ crawler.prototype.watchFree=function(){
 crawler.prototype.isFree=function(){
     return this.jobs.isFree()
 }
-
-crawler.prototype.watchFree=function(){
-    return this.jobs.watchFree()
-}
-
-
 
 module.exports=crawler

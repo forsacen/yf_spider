@@ -78,6 +78,14 @@ spider.crawler:event
 
     Event: 'schedule',任务即将开始前触发,用于修改请求参数
     Event: 'drain',任务队列为空触发
+    Event: 'scheduleSync',任务开始之前触发,参数option,此时可以修改option做参数调整(option为
+            object 时候才会生效),
+            和schedule不同之处在于该事件的处理函数如果是async function,将会被等待(await),
+            使用方式为:
+            this.onAsync('scheduleSync',async function(done,option){
+                await //do something
+                done()//该函数调用后 await该函数将返回
+            }
 
 spider.puppeteer:event
     
