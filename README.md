@@ -18,6 +18,12 @@ var s=new spider(option)
     option.crawler.jquery:bool 默认true,内容是否用jquery解析,解析后存在res.$里面
     option.crawler.charset:string 默认utf-8,还支持gb2312,gbk,该选项和jquery选项有关,如果jquery选项为false,该选项无效
     option.crawler.redirect:bool 默认true,是否重定向,比如301,302跳转,
+    option.crawler.errPageCommiter:object 默认undefined,如果不为undefind,则必须包含错误页面提交器,如果有该选项,获取页面失败后会
+        调用提交器的submit方法自动上传相关数据,以便以后修复,
+        修复的请求的res.options会带有_repairID选项
+    option.crawler.successPageSubmiter:object 默认undefined,如果不为undefind,则必须包含成功页面提交器,获取页面成功后会自动
+        调用提交器的submit方法上传相关数据,下次数据库中找到该条数据则不会重爬。
+
     
     /***************************
     puppeteer

@@ -59,6 +59,18 @@ function crawler(opt){
                         res.$=cheerio.load(iconv.decode(res.body,reqOpt.charset),{decodeEntities: false})
                     }
                 }
+                if(err && this.option.errPageSubmiter){
+                    let data=Object.assign({},res.options)
+                    await this.option.errPageSubmiter.submit(data)
+                }else if(err===null){
+                    if(res.options._repairID){
+                        await this.option.errPageSubmiter.delete(res.options._repairID)
+                        delete res.options._repairID
+                    }
+                    if(this.option.successPageSubmiter){
+                        await this.option.successPageSubmiter.submit(res.options.url)
+                    }
+                }
                 if(reqOpt.callback && typeof reqOpt.callback==='function'){
                     await reqOpt.callback(err,res)
                 }
@@ -98,10 +110,15 @@ crawler.prototype.emitAsync=function(event,...args){
     })
 }
 
-crawler.prototype.queue=function(option){
+crawler.prototype.queue=async function(option){
+    if(this.option.successPageSubmiter){
+        let re= await this.option.successPageSubmiter.spied(option.url)
+        if(re){
+            return
+        }
+    }
     return this.jobs.queue(option)
 }
-
 
 crawler.prototype.watchFree=function(){
     return this.jobs.watchFree()
