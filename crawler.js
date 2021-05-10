@@ -1,5 +1,4 @@
 const Jobs=require('./lib/yf_jobs')
-const request=require('./lib/yf_request')
 const cheerio=require('cheerio')
 const iconv = require('iconv-lite')
 const EventEmitter = require('events').EventEmitter
@@ -7,6 +6,11 @@ const util=require('util')
 function crawler(opt){
     this.option=opt
     this.limit=0
+    if(this.option.type==='puppeteer'){
+        this.request=require('./lib/yf_puppeteer')
+    }else{
+        this.request=require('./lib/yf_request')
+    }
     if('maxConnections' in this.option){
         this.limit=this.option.maxConnections
     }
@@ -24,6 +28,9 @@ function crawler(opt){
     }
     if(!('redirect' in this.option)){
         this.option.redirect=true
+    }
+    if(this.option.type==='puppeteer'&&!('puppeteer' in this.option)){
+        this.option.puppeteer= {}
     }
     this.jobs=new Jobs({limit:this.limit,callback:(option,done)=>{
             let reqOpt=option
@@ -45,7 +52,32 @@ function crawler(opt){
             if(!('callback' in reqOpt)){
                 reqOpt.callback=this.option.callback
             }
-            request(reqOpt,async (err,res)=> {
+            if(this.option.type==='puppeteer'){
+                if(!('puppeteer' in reqOpt)){
+                    reqOpt.puppeteer=this.option.puppeteer
+                }
+                if(reqOpt.waitForTimeout===undefined&&this.option.waitForTimeout!==undefined){
+                    reqOpt.waitForTimeout=this.option.waitForTimeout
+                }
+                if(reqOpt.waitUntil===undefined&&this.option.waitUntil!==undefined){
+                    reqOpt.waitUntil=this.option.waitUntil
+                }
+                if(reqOpt.loadStatic===undefined&&this.option.loadStatic!==undefined){
+                    reqOpt.loadStatic=this.option.loadStatic
+                }
+                if(reqOpt.waitForSelector===undefined&&this.option.waitForSelector!==undefined){
+                    reqOpt.waitForSelector=this.option.waitForSelector
+                }
+                if(reqOpt.headless===undefined&&reqOpt.puppeteer.headless===undefined&&this.option.headless!==undefined){
+                    reqOpt.puppeteer.headless=this.option.headless
+                }else if(reqOpt.headless!==undefined){
+                    reqOpt.puppeteer.headless=reqOpt.headless
+                    delete reqOpt.headless
+                }else{
+                    reqOpt.puppeteer.headless=true
+                }
+            }
+            this.request(reqOpt,async (err,res)=> {
                 if(err&&reqOpt.retries>0){
                     reqOpt.retries--
                     this.jobs.pool.unshift(reqOpt)
@@ -74,7 +106,7 @@ function crawler(opt){
                 if(reqOpt.callback && typeof reqOpt.callback==='function'){
                     await reqOpt.callback(err,res)
                 }
-                done()
+                await done()
             })
         }})
     this.jobs.on('drain',()=>{

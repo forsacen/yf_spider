@@ -11,7 +11,6 @@ function puppeteer(){
     this.browserOpt={
         headless: false,
         args: [
-            '--no-sandbox',
             '--disable-gpu',
             '--disable-dev-shm-usage',
             '--disable-setuid-sandbox',

@@ -12,7 +12,11 @@ var s=new spider(option)
     ***************************/
     opiton.crawler:object 常规爬虫选项,不定义则不初始化常规爬虫,该项为全局设置,如果queue里有相关设置,则被覆盖
     option.crawler.maxConnections:number 最大并发多少,不设置或者0为不限
-    option.crawler.maxSize:number queue池最大数量,不设置或者0为不限,queue池子大于等于该数,spider.crawler.queue方法await将会阻塞
+    option.crawler.type:string 下载器类型，默认request,可选puppeteer
+    option.crawler.waitForSelector:string 页面等待选择器，默认无,type=puppeteer时有效
+    option.crawler.waitForTimeout:number 毫秒，页面完成后再等多久，默认无，type=puppeteer时有效
+    option.crawler.headless:bool 默认true,是否启用无头浏览器，type=puppeteer时有效
+    option.crawler.loadStatic:bool 默认false,是否加载静态资源，有jpg,png,ico,gif,css,mp4,jpeg
     option.crawler.retries:number 默认为3,失败了重试几次
     option.crawler.timeout:超时选项,毫秒,默认30秒,30000毫秒
     option.crawler.jquery:bool 默认true,内容是否用jquery解析,解析后存在res.$里面
@@ -43,16 +47,22 @@ spider.crawler:method
 
     crawler.queue(option):添加任务
         option:object
-        option.url:sting 采集的url
+        option.type:string 下载器类型，默认request,可选puppeteer
+        option.waitForSelector:string 等待的元素，默认无,option.type为puppeteer时有效
+        option.waitForTimeout:number 毫秒,页面加载完成后再等多长时间，默认无，option.type为puppeteer时有效
+        option.waitUntil:string默认domcontentloaded，可选networkidle0，networkidle2，option.type为puppeteer时有效
+        option.headless:bool默认false,是否启用无头模式，option.type为puppeteer时有效
+        option.loadStatic:bool是否加载静态资源，包括css,jpg,png,ico,gif,mp4,默认false，option.type为puppeteer时有效
+        option.url:string 采集的url
         option.proxy:string 代理,格式http://123.231.110.119:8888, socks5://127.0.0.1:1080
         option.methd:string 默认GET,支持GET和POST,POST不同类型数据需要在headers选项添加对应字段
         option.data:string|Buffer|Uint8Array POST的数据,如果方法为GET,该选项无效
-        option.timeout:超时选项,毫秒,默认0秒为不限 
+        option.timeout:number 超时选项,毫秒,默认0秒为不限 
         option.headers:object对象,浏览器httpheader,默认没有
         option.retries:number 默认为3,失败了重试几次
         option.jquery:bool 默认true,内容是否用jquery解析,解析后存在res.$里面
         option.charset:string 默认utf-8,还支持gb2312,gbk,该选项和jquery选项有关,如果jquery选项为false,该选项无效
-        option.redirect:bool 默认false,是否重定向,比如301,302跳转
+        option.redirect:bool 默认false,是否重定向,比如301,302跳转,option.type不为puppeteer时有效
         option.callback:function 回调函数
         
     crawler.isFree():return bool
